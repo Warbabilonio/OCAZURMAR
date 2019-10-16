@@ -1,0 +1,10 @@
+target/
+.settings/
+.classpath
+.factorypath
+.project
+.tern-project
+/.apt_generated_tests/
+bin/
+
+src.rar
