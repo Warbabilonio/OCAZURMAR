@@ -3,12 +3,13 @@ package application.utils;
 public class Constantes {
 
 	private Constantes() {}
-	
+
 	public static String JDBC = "jdbc:sqlite:";
-	
+
+	/** 20 */
 	public static int MAX_CONEXIONES = 20;
 
-	public static String BBDD_NOMBRE = "zurmar";
+	public static String BBDD_NOMBRE = "ZURMAR.bd";
 
 	public static String BBDD_RUTA = "C:\\BaseDatos\\";
 
@@ -37,6 +38,7 @@ public class Constantes {
 
 	/** EMBARCACION.EMBBY */
 	public static String EMBARCACION_EMBBY = "EMBBY";
+
 	/** EMBARCACION.EMBNAME */
 	public static String EMBARCACION_EMBNAME = "EMBNAME";
 

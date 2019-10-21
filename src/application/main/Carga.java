@@ -2,6 +2,7 @@ package application.main;
 
 import org.apache.log4j.Logger;
 
+import application.utils.Utilidades;
 import javafx.application.Platform;
 import javafx.application.Preloader;
 import javafx.event.Event;
@@ -15,7 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 public class Carga extends Preloader implements EventHandler<Event> {
 
@@ -77,14 +77,8 @@ public class Carga extends Preloader implements EventHandler<Event> {
 		preloaderStage.initStyle(StageStyle.UNDECORATED);
 		preloaderStage.setResizable(false);
 		preloaderStage.setAlwaysOnTop(true);
-		preloaderStage.centerOnScreen();
-		preloaderStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-
-			@Override
-			public void handle(WindowEvent event) {
-				event.consume();
-			}
-		});
+		preloaderStage.setOnCloseRequest(Utilidades.noCerrarVentana());
+		Utilidades.centrarPantalla(preloaderStage, WIDTH, HEIGHT);
 		preloaderStage.show();
 	}
 
@@ -138,15 +132,12 @@ public class Carga extends Preloader implements EventHandler<Event> {
 		switch (type) {
 			case BEFORE_LOAD:
 				// Called after MyPreloader#start is called.
-				log.info(Principal.STEP() + "BEFORE_LOAD");
 				break;
 			case BEFORE_INIT:
 				// Called before Principal#init is called.
-				log.info(Principal.STEP() + "BEFORE_INIT");
 				break;
 			case BEFORE_START:
 				// Called after Principal#init and before Principal#start is called.
-				log.info(Principal.STEP() + "BEFORE_START");
 				preloaderStage.hide();
 				break;
 		}

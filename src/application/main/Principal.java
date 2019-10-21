@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.sun.javafx.application.LauncherImpl;
 
+import application.utils.StaticUtils;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,31 +26,24 @@ public class Principal extends Application {
 
 	private static int stepCount = 1;
 
-	// Used to demonstrate step couns.
-	public static String STEP() {
-		return stepCount++ + ". ";
-	}
-
 	private Stage applicationStage;
 
 	public Principal() {
-		// Constructor is called after BEFORE_LOAD.
-		log.info(Principal.STEP() + "MyApplication constructor called, thread: " + Thread.currentThread().getName());
+		log.info("Entrando al constructor");
 	}
 
 	@Override
 	public void init() throws Exception {
-		log.info(Principal.STEP() + "MyApplication#init (doing some heavy lifting), thread: " + Thread.currentThread().getName());
-		// Perform some heavy lifting (i.e. database start, check for application updates, etc. )
+		StaticUtils.iniciar();
 		for (int i = 0; i < COUNT_LIMIT; i++) {
 			double progress = (100 * i) / COUNT_LIMIT;
 			LauncherImpl.notifyPreloader(this, new Carga.ProgressNotification(progress));
 		}
+		throw new Exception("Test error " +this.getClass().getName());
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		log.info(Principal.STEP() + "MyApplication#start (initialize and show primary application stage), thread: " + Thread.currentThread().getName());
 		applicationStage = primaryStage;
 		Label title = new Label("This is your application!");
 		title.setTextAlignment(TextAlignment.CENTER);
@@ -59,5 +53,10 @@ public class Principal extends Application {
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
 		applicationStage.setScene(scene);
 		applicationStage.show();
+	}
+
+	@Override
+	public void stop() throws Exception {
+		super.stop();
 	}
 }
