@@ -23,20 +23,20 @@ public class Conexion {
 
 	private static SQLiteConnectionPoolDataSource dataSource = null;
 
-	private static MiniConnectionPoolManager pollConexiones = null;
+	private static MiniConnectionPoolManager poolConexiones = null;
 
 	private Conexion() {}
 
 	public static void iniciar() {
 		try {
-			if (null == pollConexiones) {
+			if (null == poolConexiones) {
 				conexiones = new ArrayList<>(Constantes.MAX_CONEXIONES);
 				conexionesUsadas = new ArrayList<>();
 				dataSource = Conexion.getDataSource();
-				pollConexiones = new MiniConnectionPoolManager(dataSource, Constantes.MAX_CONEXIONES);
+				poolConexiones = new MiniConnectionPoolManager(dataSource, Constantes.MAX_CONEXIONES);
 				for (int i = 0; i < Constantes.MAX_CONEXIONES; i++) {
-					conn = pollConexiones.getConnection();
-					conexiones.add(conn);
+					conexiones.add(poolConexiones.getConnection());
+					log.info("Conexion actual : " +conexiones.get(i));
 				}
 				log.info("Pool de conexiones realizada correctamente - " + dataSource.getUrl().toString());
 			}
@@ -47,18 +47,39 @@ public class Conexion {
 		}
 	}
 
-	public static Connection getConnection() {
-		if (!conexiones.isEmpty() && !conexiones.contains(conn))
-			conn = conexiones.remove(conexiones.size() - 1);
+	public static Connection getConnection() throws SQLException {
+		if (conexiones.isEmpty()) {
+			if (conexionesUsadas.size() < Constantes.MAX_CONEXIONES) {
+				conexiones.add(poolConexiones.getConnection());
+			} else {
+				throw new RuntimeException("Se ha alcanzado el numero maximo de conexiones permitidas");
+			}
+		}
+		final Connection conn = conexiones.remove(conexiones.size() - 1);
 		conexionesUsadas.add(conn);
 		log.info("Conexion obtenida - " + conn.toString());
 		return conn;
 	}
 
+	public static boolean dropConnection(Connection conn) {
+		if (conexionesUsadas.isEmpty())
+			return false;
+		conexiones.add(conn);
+		return conexionesUsadas.remove(conn);
+	}
+
+	public static void shutdown() throws SQLException {
+		conexionesUsadas.forEach(Conexion::dropConnection);
+		for (Connection c : conexiones) {
+			c.close();
+		}
+		conexiones.clear();
+	}
+
 	public static void open() {
 		try {
-			if (pollConexiones != null && conn == null) {
-				conn = pollConexiones.getConnection();
+			if (poolConexiones != null && conn == null) {
+				conn = poolConexiones.getConnection();
 				log.info("Conexion establecida correctamente - " + conn.toString());
 			}
 		} catch (SQLException e) {
@@ -68,7 +89,7 @@ public class Conexion {
 
 	public static void close() {
 		try {
-			if (pollConexiones != null && conn != null) {
+			if (poolConexiones != null && conn != null) {
 				conn.close();
 				conn = null;
 				log.info("Conexion cerrada correctamente");
@@ -82,9 +103,9 @@ public class Conexion {
 
 	public static void cerrar() {
 		try {
-			if (pollConexiones != null) {
-				pollConexiones.dispose();
-				pollConexiones = null;
+			if (poolConexiones != null) {
+				poolConexiones.dispose();
+				poolConexiones = null;
 				log.info("Se han cerrado todas las conexiones");
 			}
 		} catch (SQLException e) {

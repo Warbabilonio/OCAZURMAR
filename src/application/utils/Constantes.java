@@ -6,7 +6,7 @@ public class Constantes {
 
 	public static String JDBC = "jdbc:sqlite:";
 
-	/** 20 */
+	/** 10 */
 	public static int MAX_CONEXIONES = 10;
 
 	public static String BBDD_NOMBRE = "ZURMAR.bd";
