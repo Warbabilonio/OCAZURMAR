@@ -1,9 +1,12 @@
 package application.main;
 
+import java.sql.Connection;
+
 import org.apache.log4j.Logger;
 
 import com.sun.javafx.application.LauncherImpl;
 
+import application.bbdd.Conexion;
 import application.utils.StaticUtils;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -35,11 +38,17 @@ public class Principal extends Application {
 	@Override
 	public void init() throws Exception {
 		StaticUtils.iniciar();
+		Connection conn = Conexion.getConnection();
+		Connection conn2 = Conexion.getConnection();
+		Connection conn3 = Conexion.getConnection();
+		Connection conn4 = Conexion.getConnection();
+		
+		
 		for (int i = 0; i < COUNT_LIMIT; i++) {
 			double progress = (100 * i) / COUNT_LIMIT;
 			LauncherImpl.notifyPreloader(this, new Carga.ProgressNotification(progress));
 		}
-		throw new Exception("Test error " +this.getClass().getName());
+		// throw new Exception("Test error " +this.getClass().getName());
 	}
 
 	@Override
