@@ -2,7 +2,7 @@ package application.utils;
 
 import application.bbdd.Conexion;
 import application.beans.Embarcacion;
-import application.daos.EmbarcacionDAO;
+import application.daos.EmbarcacionDao;
 
 public class StaticUtils {
 
@@ -11,10 +11,9 @@ public class StaticUtils {
 	}
 
 	public static void iniciar() {
-		Conexion.iniciar();
 	}
 
-	public static EmbarcacionDAO getEmbarcacionDAO() {
-		return EmbarcacionDAO.getInstance();
+	public static EmbarcacionDao getEmbarcacionDAO() {
+		return EmbarcacionDao.getInstance();
 	}
 }

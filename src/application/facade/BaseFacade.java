@@ -1,9 +1,9 @@
-package application.daos;
+package application.facade;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public interface BaseDao {
+public interface BaseFacade {
 
 	boolean alta(Object ob) throws SQLException;
 

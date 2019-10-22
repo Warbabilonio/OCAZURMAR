@@ -1,6 +1,7 @@
 package application.main;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
@@ -37,14 +38,10 @@ public class Principal extends Application {
 
 	@Override
 	public void init() throws Exception {
-		StaticUtils.iniciar();
-
-		
 		for (int i = 0; i < COUNT_LIMIT; i++) {
 			double progress = (100 * i) / COUNT_LIMIT;
 			LauncherImpl.notifyPreloader(this, new Carga.ProgressNotification(progress));
 		}
-		// throw new Exception("Test error " +this.getClass().getName());
 	}
 
 	@Override

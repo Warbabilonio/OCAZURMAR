@@ -13,11 +13,11 @@ import application.bbdd.Conexion;
 import application.beans.Embarcacion;
 import application.utils.Constantes;
 
-public class EmbarcacionDAO implements BaseDao {
+public class EmbarcacionDao implements BaseDao {
 
-	private static final Logger log = Logger.getLogger(EmbarcacionDAO.class);
+	private static final Logger log = Logger.getLogger(EmbarcacionDao.class);
 
-	private static EmbarcacionDAO instancia = null;
+	private static EmbarcacionDao instancia = null;
 
 	private PreparedStatement pst = null;
 
@@ -25,22 +25,21 @@ public class EmbarcacionDAO implements BaseDao {
 
 	private Connection conn = null;
 
-	private EmbarcacionDAO() {}
+	private EmbarcacionDao() {}
 
-	public static EmbarcacionDAO getInstance() {
+	public static EmbarcacionDao getInstance() {
 		if (instancia == null) {
-			instancia = new EmbarcacionDAO();
+			instancia = new EmbarcacionDao();
 		}
 		return instancia;
 	}
 
 	@Override
-	public boolean alta(Object ob) {
+	public boolean alta(Object ob) throws SQLException {
 		log.info("Entrando en alta");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
-			Conexion.open();
-			conn = Conexion.getConn();
+			conn = Conexion.getConnection();
 			final String sql = "INSERT INTO " + Constantes.EMBARCACION_TABLE + "(" + Constantes.EMBARCACION_EMBNUMBER
 					+ "," + Constantes.EMBARCACION_EMBLOA + "," + Constantes.EMBARCACION_EMBBREATH + ","
 					+ Constantes.EMBARCACION_EMBDEPTH + "," + Constantes.EMBARCACION_EMBSD + ","
@@ -62,22 +61,21 @@ public class EmbarcacionDAO implements BaseDao {
 				log.info("No se ha podido Realizar la insercion");
 				return false;
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			log.error("Error al insertar la nueva embarcacion - " + e.getMessage());
 			return false;
 		} finally {
 			pst = null;
-			Conexion.close();
+			conn.close();
 		}
 	}
 
 	@Override
-	public boolean baja(Object ob) {
+	public boolean baja(Object ob) throws SQLException {
 		log.info("Entrando en baja");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
-			Conexion.open();
-			conn = Conexion.getConn();
+			conn = Conexion.getConnection();
 			final String sql = "DELETE FROM " + Constantes.EMBARCACION_TABLE + " WHERE "
 					+ Constantes.EMBARCACION_EMBNUMBER + " = ?";
 			pst = conn.prepareStatement(sql);
@@ -94,17 +92,16 @@ public class EmbarcacionDAO implements BaseDao {
 			return false;
 		} finally {
 			pst = null;
-			Conexion.close();
+			conn.close();
 		}
 	}
 
 	@Override
-	public boolean modificacion(Object ob) {
+	public boolean modificacion(Object ob) throws SQLException {
 		log.info("Entrando en modificacion");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
-			Conexion.open();
-			conn = Conexion.getConn();
+			conn = Conexion.getConnection();
 			final String sql = "UPDATE " + Constantes.EMBARCACION_TABLE + " SET " + Constantes.EMBARCACION_EMBLOA
 					+ "=?," + Constantes.EMBARCACION_EMBBREATH + "=?," + Constantes.EMBARCACION_EMBDEPTH + "=?,"
 					+ Constantes.EMBARCACION_EMBSD + "=?," + Constantes.EMBARCACION_EMBDW + "=?,"
@@ -131,20 +128,19 @@ public class EmbarcacionDAO implements BaseDao {
 			return false;
 		} finally {
 			pst = null;
-			Conexion.close();
+			conn.close();
 		}
 	}
 
 	@Override
-	public List<Object> consulta(Object ob) {
+	public List<Object> consulta(Object ob) throws SQLException {
 		log.info("Entrando en consulta");
 		final Embarcacion emb = (Embarcacion) ob;
 		final List<Object> embarcaciones = new ArrayList<Object>();
 		try {
 			final String sql = "SELECT * FROM " + Constantes.EMBARCACION_TABLE + " WHERE "
 					+ Constantes.EMBARCACION_EMBNUMBER + "=?";
-			Conexion.open();
-			conn = Conexion.getConn();
+			conn = Conexion.getConnection();
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, emb.getImoNumber());
 			rs = pst.executeQuery();
@@ -171,18 +167,17 @@ public class EmbarcacionDAO implements BaseDao {
 		} finally {
 			pst = null;
 			rs = null;
-			Conexion.close();
+			conn.close();
 		}
 	}
 
 	@Override
-	public List<Object> lista() {
+	public List<Object> lista() throws SQLException {
 		log.info("Entrando en consulta");
 		final List<Object> embarcaciones = new ArrayList<Object>();
 		try {
 			final String sql = "SELECT * FROM " + Constantes.EMBARCACION_TABLE;
-			Conexion.open();
-			conn = Conexion.getConn();
+			conn = Conexion.getConnection();
 			pst = conn.prepareStatement(sql);
 			rs = pst.executeQuery();
 			if (rs != null) {
@@ -208,7 +203,7 @@ public class EmbarcacionDAO implements BaseDao {
 		} finally {
 			pst = null;
 			rs = null;
-			Conexion.close();
+			conn.close();
 		}
 	}
 }
