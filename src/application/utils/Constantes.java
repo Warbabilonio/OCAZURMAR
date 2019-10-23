@@ -9,7 +9,7 @@ public class Constantes {
 	/** 20 */
 	public static int MAX_CONEXIONES = 20;
 
-	public static String BBDD_NOMBRE = "ZURMAR.bd";
+	public static String BBDD_NOMBRE = "ZURMAR.db";
 
 	public static String BBDD_RUTA = "C:\\BaseDatos\\";
 

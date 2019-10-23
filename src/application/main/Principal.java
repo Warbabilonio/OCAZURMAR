@@ -2,12 +2,15 @@ package application.main;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.sun.javafx.application.LauncherImpl;
 
 import application.bbdd.Conexion;
+import application.beans.Embarcacion;
+import application.facade.EmbarcacionFacade;
 import application.utils.StaticUtils;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -38,9 +41,24 @@ public class Principal extends Application {
 
 	@Override
 	public void init() throws Exception {
+		testConexion();
 		for (int i = 0; i < COUNT_LIMIT; i++) {
 			double progress = (100 * i) / COUNT_LIMIT;
 			LauncherImpl.notifyPreloader(this, new Carga.ProgressNotification(progress));
+		}
+	}
+
+	private void testConexion() {
+		try {
+			Connection conn = Conexion.getConnection();
+			log.info("Conexion Realizada correctamente - " +conn.toString());
+			List<Object> embarcaciones = EmbarcacionFacade.getInistance().lista();
+			for(Object ob: embarcaciones) {
+				final Embarcacion embarcacion = (Embarcacion) ob;
+				log.info(embarcacion.toString());
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
