@@ -66,7 +66,7 @@ public class Carga extends Preloader implements EventHandler<Event> {
 			scene.setOnMousePressed(this);
 			scene.setOnMouseDragged(this);
 			scene.setCursor(Cursor.WAIT);
-			scene.getStylesheets().add(this.getClass().getResource("../estatico/application.css").toExternalForm());
+			scene.getStylesheets().add(ClassLoader.getSystemResource("application/estatico/application.css").toExternalForm());
 		});
 	}
 
