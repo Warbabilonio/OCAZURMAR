@@ -41,12 +41,11 @@ public class Principal extends Application {
 
 	@Override
 	public void init() throws Exception {
-		testConexion();
 		for (int i = 0; i < COUNT_LIMIT; i++) {
 			double progress = (100 * i) / COUNT_LIMIT;
 			LauncherImpl.notifyPreloader(this, new Carga.ProgressNotification(progress));
-			
 		}
+		testConexion();
 	}
 
 	private void testConexion() {

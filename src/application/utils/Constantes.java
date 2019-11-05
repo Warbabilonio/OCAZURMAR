@@ -6,7 +6,6 @@ public class Constantes {
 
 	public static String JDBC = "jdbc:sqlite:";
 
-	/** 20 */
 	public static int MAX_CONEXIONES = 20;
 
 	public static String BBDD_NOMBRE = "ZURMAR.db";
@@ -15,6 +14,9 @@ public class Constantes {
 
 	public static String BBDD = BBDD_RUTA + BBDD_NOMBRE;
 
+	public static String CARGA_TITULO = "Iniciando";
+
+	// TABLAS BASE DATOS
 	/** EMBARCACION */
 	public static String EMBARCACION_TABLE = "EMBARCACION";
 

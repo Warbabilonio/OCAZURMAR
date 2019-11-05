@@ -1,21 +1,16 @@
 package application.main;
 
-import java.net.URISyntaxException;
-
 import org.apache.log4j.Logger;
 
+import application.utils.Constantes;
 import application.utils.Utilidades;
 import javafx.application.Platform;
 import javafx.application.Preloader;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -25,61 +20,35 @@ public class Carga extends Preloader implements EventHandler<Event> {
 
 	private static final Logger log = Logger.getLogger(Carga.class);
 
-	private static final double WIDTH = 300;
+	private final double WIDTH = 300;
 
-	private static final double HEIGHT = 250;
-
-	private static final String tituloString = "Iniciando la aplicacion";
-
-	private static int max = tituloString.length() + 3;
+	private final double HEIGHT = 250;
 
 	private double xOffset = 0;
 
 	private double yOffset = 0;
 
-	private boolean controlProgreso = false;
-
-	private boolean controlPorcentaje = false;
-
 	private Stage preloaderStage;
 
 	private Scene scene;
 
-	private Label progress;
-
-	private ProgressBar progressBar;
-
-	private Label title;
+	private Label titulo;
 
 	public Carga() {}
 
 	@Override
 	public void init() throws Exception {
-		// If preloader has complex UI it's initialization can be done in MyPreloader#init
 		Platform.runLater(() -> {
-			title = new Label(tituloString);
-			title.setId("progreso-titulo");
-			progress = new Label("0");
-			progress.setId("progreso-texto");
-			progressBar = new ProgressBar(0);
-			progressBar.setId("progreso-barra");
-			Image i = null;
-			try {
-				i = new Image(ClassLoader.getSystemResource("img/wave-preloader.gif").toURI().toString());
-			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			ImageView img = new ImageView(i);
-//			final VBox root = new VBox(title, progressBar, progress);
-			final VBox root = new VBox(img);
-			root.setAlignment(Pos.CENTER);
+			titulo = new Label(Constantes.CARGA_TITULO);
+			titulo.setId("progreso-titulo");
+			VBox root = new VBox();
+			root.getChildren().addAll(titulo);
 			root.setId("progreso-panel");
 			scene = new Scene(root, WIDTH, HEIGHT);
 			scene.setOnMousePressed(this);
 			scene.setOnMouseDragged(this);
 			scene.setCursor(Cursor.WAIT);
-//			scene.getStylesheets().add(ClassLoader.getSystemResource("css/application.css").toExternalForm());
+			Utilidades.addCss(scene);
 		});
 	}
 
@@ -96,47 +65,7 @@ public class Carga extends Preloader implements EventHandler<Event> {
 	}
 
 	@Override
-	public void handleApplicationNotification(PreloaderNotification info) {
-		// Handle application notification in this point (see Principal#init).
-//		if (info instanceof ProgressNotification) {
-//			final ProgressNotification notificacion = (ProgressNotification) info;
-//			Double progreso = notificacion.getProgress() != 0.00 ? notificacion.getProgress() / 100 : 0.00;
-//			progressBar.setProgress(progreso);
-//			progress.setText((int) Math.round(notificacion.getProgress()) + " %");
-//			if ((!controlPorcentaje && notificacion.getProgress() % 5 != 0) && controlProgreso) {
-//				controlPorcentaje = false;
-//				controlProgreso = false;
-//			}
-//			if ((!controlPorcentaje && notificacion.getProgress() % 5 == 0) && !controlProgreso) {
-//				controlPorcentaje = true;
-//				if (controlPorcentaje && !controlProgreso)
-//					animarTexto(title);
-//			}
-//		}
-	}
-
-	private void animarTexto(Label title) {
-		if (controlPorcentaje && !controlProgreso) {
-			controlProgreso = true;
-			controlPorcentaje = false;
-			switch (max - title.getText().length()) {
-				case 3:
-					title.setText(tituloString + ".");
-					break;
-				case 2:
-					title.setText(tituloString + "..");
-					break;
-				case 1:
-					title.setText(tituloString + "...");
-					break;
-				case 0:
-					title.setText(tituloString);
-					break;
-				default:
-					break;
-			}
-		}
-	}
+	public void handleApplicationNotification(PreloaderNotification info) {}
 
 	@Override
 	public void handleStateChangeNotification(StateChangeNotification info) {
@@ -159,13 +88,12 @@ public class Carga extends Preloader implements EventHandler<Event> {
 	@Override
 	public void handleProgressNotification(ProgressNotification info) {
 		log.info("Progreso: " + info.getProgress());
-		log.info("Progreso to String: " + info.toString());
 	}
 
 	@Override
 	public void handle(Event event) {
 		if (event instanceof MouseEvent) {
-			MouseEvent evento = (MouseEvent) event;
+			MouseEvent evento = (MouseEvent) event;;
 			switch (event.getEventType().getName()) {
 				case "MOUSE_PRESSED":
 					xOffset = evento.getSceneX();
