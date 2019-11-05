@@ -7,11 +7,11 @@ public class Tanque {
 	private String codigo;
 
 	public Tanque() {
-		super();
+		this.nombre = "";
+		this.codigo = "";
 	}
 
 	public Tanque(String nombre, String codigo) {
-		super();
 		this.nombre = nombre;
 		this.codigo = codigo;
 	}

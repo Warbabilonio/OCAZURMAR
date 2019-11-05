@@ -35,7 +35,7 @@ public class EmbarcacionDao implements BaseDao {
 	}
 
 	@Override
-	public boolean alta(Object ob) throws SQLException {
+	public Boolean alta(Object ob) throws SQLException {
 		log.info("Entrando en alta");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
@@ -71,7 +71,7 @@ public class EmbarcacionDao implements BaseDao {
 	}
 
 	@Override
-	public boolean baja(Object ob) throws SQLException {
+	public Boolean baja(Object ob) throws SQLException {
 		log.info("Entrando en baja");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
@@ -97,7 +97,7 @@ public class EmbarcacionDao implements BaseDao {
 	}
 
 	@Override
-	public boolean modificacion(Object ob) throws SQLException {
+	public Boolean modificacion(Object ob) throws SQLException {
 		log.info("Entrando en modificacion");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
@@ -173,7 +173,7 @@ public class EmbarcacionDao implements BaseDao {
 
 	@Override
 	public List<Object> lista() throws SQLException {
-		log.info("Entrando en consulta");
+		log.info("Entrando en lista");
 		final List<Object> embarcaciones = new ArrayList<Object>();
 		try {
 			final String sql = "SELECT * FROM " + Constantes.EMBARCACION_TABLE;

@@ -25,17 +25,17 @@ public class EmbarcacionFacade implements BaseFacade {
 	}
 
 	@Override
-	public boolean alta(Object ob) throws SQLException {
+	public Boolean alta(Object ob) throws SQLException {
 		return dao.alta(ob);
 	}
 
 	@Override
-	public boolean baja(Object ob) throws SQLException {
+	public Boolean baja(Object ob) throws SQLException {
 		return dao.baja(ob);
 	}
 
 	@Override
-	public boolean modificacion(Object ob) throws SQLException {
+	public Boolean modificacion(Object ob) throws SQLException {
 		return modificacion(ob);
 	}
 

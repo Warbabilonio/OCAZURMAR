@@ -45,18 +45,20 @@ public class Principal extends Application {
 		for (int i = 0; i < COUNT_LIMIT; i++) {
 			double progress = (100 * i) / COUNT_LIMIT;
 			LauncherImpl.notifyPreloader(this, new Carga.ProgressNotification(progress));
+			
 		}
 	}
 
 	private void testConexion() {
 		try {
 			Connection conn = Conexion.getConnection();
-			log.info("Conexion Realizada correctamente - " +conn.toString());
+			log.info("Conexion Realizada correctamente - " + conn.toString());
 			List<Object> embarcaciones = EmbarcacionFacade.getInistance().lista();
-			for(Object ob: embarcaciones) {
+			for (Object ob : embarcaciones) {
 				final Embarcacion embarcacion = (Embarcacion) ob;
 				log.info(embarcacion.toString());
 			}
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

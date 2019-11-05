@@ -20,8 +20,8 @@ public class Conexion {
 		if (poolConexiones == null) {
 			dataSource = getDataSource();
 			poolConexiones = new MiniConnectionPoolManager(dataSource, Constantes.MAX_CONEXIONES);
-			log.info("Pool de conexiones realizada correctamente - Conexiones activas: "
-					+ poolConexiones.getActiveConnections());
+			log.info("Pool de conexiones realizada correctamente");
+			statusPool();
 		}
 	}
 
@@ -36,6 +36,11 @@ public class Conexion {
 
 	public static void clearPool() throws SQLException {
 		poolConexiones.dispose();
+	}
+
+	public static void statusPool() {
+		log.info("Conexiones activas: " + poolConexiones.getActiveConnections());
+		log.info("Conexiones inactivas: " + poolConexiones.getInactiveConnections());
 	}
 
 	private static SQLiteConnectionPoolDataSource getDataSource() {

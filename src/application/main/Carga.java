@@ -1,5 +1,7 @@
 package application.main;
 
+import java.net.URISyntaxException;
+
 import org.apache.log4j.Logger;
 
 import application.utils.Utilidades;
@@ -12,6 +14,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -59,14 +63,23 @@ public class Carga extends Preloader implements EventHandler<Event> {
 			progress.setId("progreso-texto");
 			progressBar = new ProgressBar(0);
 			progressBar.setId("progreso-barra");
-			final VBox root = new VBox(title, progressBar, progress);
+			Image i = null;
+			try {
+				i = new Image(ClassLoader.getSystemResource("img/wave-preloader.gif").toURI().toString());
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ImageView img = new ImageView(i);
+//			final VBox root = new VBox(title, progressBar, progress);
+			final VBox root = new VBox(img);
 			root.setAlignment(Pos.CENTER);
 			root.setId("progreso-panel");
 			scene = new Scene(root, WIDTH, HEIGHT);
 			scene.setOnMousePressed(this);
 			scene.setOnMouseDragged(this);
 			scene.setCursor(Cursor.WAIT);
-			scene.getStylesheets().add(ClassLoader.getSystemResource("css/application.css").toExternalForm());
+//			scene.getStylesheets().add(ClassLoader.getSystemResource("css/application.css").toExternalForm());
 		});
 	}
 
@@ -85,21 +98,21 @@ public class Carga extends Preloader implements EventHandler<Event> {
 	@Override
 	public void handleApplicationNotification(PreloaderNotification info) {
 		// Handle application notification in this point (see Principal#init).
-		if (info instanceof ProgressNotification) {
-			final ProgressNotification notificacion = (ProgressNotification) info;
-			Double progreso = notificacion.getProgress() != 0.00 ? notificacion.getProgress() / 100 : 0.00;
-			progressBar.setProgress(progreso);
-			progress.setText((int) Math.round(notificacion.getProgress()) + " %");
-			if ((!controlPorcentaje && notificacion.getProgress() % 5 != 0) && controlProgreso) {
-				controlPorcentaje = false;
-				controlProgreso = false;
-			}
-			if ((!controlPorcentaje && notificacion.getProgress() % 5 == 0) && !controlProgreso) {
-				controlPorcentaje = true;
-				if (controlPorcentaje && !controlProgreso)
-					animarTexto(title);
-			}
-		}
+//		if (info instanceof ProgressNotification) {
+//			final ProgressNotification notificacion = (ProgressNotification) info;
+//			Double progreso = notificacion.getProgress() != 0.00 ? notificacion.getProgress() / 100 : 0.00;
+//			progressBar.setProgress(progreso);
+//			progress.setText((int) Math.round(notificacion.getProgress()) + " %");
+//			if ((!controlPorcentaje && notificacion.getProgress() % 5 != 0) && controlProgreso) {
+//				controlPorcentaje = false;
+//				controlProgreso = false;
+//			}
+//			if ((!controlPorcentaje && notificacion.getProgress() % 5 == 0) && !controlProgreso) {
+//				controlPorcentaje = true;
+//				if (controlPorcentaje && !controlProgreso)
+//					animarTexto(title);
+//			}
+//		}
 	}
 
 	private void animarTexto(Label title) {
@@ -141,6 +154,12 @@ public class Carga extends Preloader implements EventHandler<Event> {
 				preloaderStage.hide();
 				break;
 		}
+	}
+
+	@Override
+	public void handleProgressNotification(ProgressNotification info) {
+		log.info("Progreso: " + info.getProgress());
+		log.info("Progreso to String: " + info.toString());
 	}
 
 	@Override
