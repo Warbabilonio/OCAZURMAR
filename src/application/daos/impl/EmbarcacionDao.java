@@ -1,9 +1,8 @@
-package application.daos;
+package application.daos.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,8 @@ import org.apache.log4j.Logger;
 
 import application.bbdd.Conexion;
 import application.beans.Embarcacion;
+import application.daos.BaseDao;
+import application.errores.ErrorDao;
 import application.utils.Constantes;
 
 public class EmbarcacionDao implements BaseDao {
@@ -35,16 +36,13 @@ public class EmbarcacionDao implements BaseDao {
 	}
 
 	@Override
-	public Boolean alta(Object ob) throws SQLException {
+	public Boolean alta(Object ob) throws ErrorDao {
 		log.info("Entrando en alta");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
 			conn = Conexion.getConnection();
-			final String sql = "INSERT INTO " + Constantes.EMBARCACION_TABLE + "(" + Constantes.EMBARCACION_EMBNUMBER
-					+ "," + Constantes.EMBARCACION_EMBLOA + "," + Constantes.EMBARCACION_EMBBREATH + ","
-					+ Constantes.EMBARCACION_EMBDEPTH + "," + Constantes.EMBARCACION_EMBSD + ","
-					+ Constantes.EMBARCACION_EMBDW + "," + Constantes.EMBARCACION_EMBBY + ")"
-					+ "VALUES(?,?,?,?,?,?,?,?)";
+			final String sql = "INSERT INTO " + Constantes.EMBARCACION_TABLE + "(" + Constantes.EMBARCACION_EMBNUMBER + "," + Constantes.EMBARCACION_EMBLOA + "," + Constantes.EMBARCACION_EMBBREATH + "," + Constantes.EMBARCACION_EMBDEPTH + ","
+					+ Constantes.EMBARCACION_EMBSD + "," + Constantes.EMBARCACION_EMBDW + "," + Constantes.EMBARCACION_EMBBY + ")" + "VALUES(?,?,?,?,?,?,?,?)";
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, embarcacion.getImoNumber());
 			pst.setDouble(2, embarcacion.getLoa());
@@ -54,59 +52,45 @@ public class EmbarcacionDao implements BaseDao {
 			pst.setDouble(6, embarcacion.getDw());
 			pst.setInt(7, embarcacion.getBuildYear());
 			pst.setString(8, embarcacion.getPreviousName());
-			if (pst.executeUpdate() != 0) {
-				log.info("La insersion se ha realizado satisfactoriamente");
-				return true;
-			} else {
-				log.info("No se ha podido Realizar la insercion");
-				return false;
-			}
+			final int status = pst.executeUpdate();
+			conn.close();
+			return status != 0;
 		} catch (Exception e) {
 			log.error("Error al insertar la nueva embarcacion - " + e.getMessage());
-			return false;
+			throw new ErrorDao(e);
 		} finally {
 			pst = null;
-			conn.close();
 		}
 	}
 
 	@Override
-	public Boolean baja(Object ob) throws SQLException {
+	public Boolean baja(Object ob) throws ErrorDao {
 		log.info("Entrando en baja");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
 			conn = Conexion.getConnection();
-			final String sql = "DELETE FROM " + Constantes.EMBARCACION_TABLE + " WHERE "
-					+ Constantes.EMBARCACION_EMBNUMBER + " = ?";
+			final String sql = "DELETE FROM " + Constantes.EMBARCACION_TABLE + " WHERE " + Constantes.EMBARCACION_EMBNUMBER + " = ?";
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, embarcacion.getImoNumber());
-			if (pst.executeUpdate() != 0) {
-				log.info("La baja se ha realizado satisfactoriamente");
-				return true;
-			} else {
-				log.info("No se ha podido Realizar la baja");
-				return false;
-			}
-		} catch (SQLException e) {
+			final int status = pst.executeUpdate();
+			conn.close();
+			return status != 0;
+		} catch (Exception e) {
 			log.error("Error al dar de baja la embarcacion - " + e.getMessage());
-			return false;
+			throw new ErrorDao(e);
 		} finally {
 			pst = null;
-			conn.close();
 		}
 	}
 
 	@Override
-	public Boolean modificacion(Object ob) throws SQLException {
+	public Boolean modificacion(Object ob) throws ErrorDao {
 		log.info("Entrando en modificacion");
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
 			conn = Conexion.getConnection();
-			final String sql = "UPDATE " + Constantes.EMBARCACION_TABLE + " SET " + Constantes.EMBARCACION_EMBLOA
-					+ "=?," + Constantes.EMBARCACION_EMBBREATH + "=?," + Constantes.EMBARCACION_EMBDEPTH + "=?,"
-					+ Constantes.EMBARCACION_EMBSD + "=?," + Constantes.EMBARCACION_EMBDW + "=?,"
-					+ Constantes.EMBARCACION_EMBBY + "=?," + Constantes.EMBARCACION_EMBNAME + "=? WHERE "
-					+ Constantes.EMBARCACION_EMBNUMBER + "=?";
+			final String sql = "UPDATE " + Constantes.EMBARCACION_TABLE + " SET " + Constantes.EMBARCACION_EMBLOA + "=?," + Constantes.EMBARCACION_EMBBREATH + "=?," + Constantes.EMBARCACION_EMBDEPTH + "=?," + Constantes.EMBARCACION_EMBSD + "=?,"
+					+ Constantes.EMBARCACION_EMBDW + "=?," + Constantes.EMBARCACION_EMBBY + "=?," + Constantes.EMBARCACION_EMBNAME + "=? WHERE " + Constantes.EMBARCACION_EMBNUMBER + "=?";
 			pst = conn.prepareStatement(sql);
 			pst.setDouble(1, embarcacion.getLoa());
 			pst.setDouble(2, embarcacion.getBreath());
@@ -116,30 +100,24 @@ public class EmbarcacionDao implements BaseDao {
 			pst.setInt(6, embarcacion.getBuildYear());
 			pst.setString(7, embarcacion.getPreviousName());
 			pst.setInt(8, embarcacion.getImoNumber());
-			if (pst.executeUpdate() != 0) {
-				log.info("La baja se ha realizado satisfactoriamente");
-				return true;
-			} else {
-				log.info("No se ha podido Realizar la baja");
-				return false;
-			}
-		} catch (SQLException e) {
+			final int status = pst.executeUpdate();
+			conn.close();
+			return status != 0;
+		} catch (Exception e) {
 			log.error("Error al dar de baja la embarcacion - " + e.getMessage());
-			return false;
+			throw new ErrorDao(e);
 		} finally {
 			pst = null;
-			conn.close();
 		}
 	}
 
 	@Override
-	public List<Object> consulta(Object ob) throws SQLException {
+	public List<Object> consulta(Object ob) throws ErrorDao {
 		log.info("Entrando en consulta");
 		final Embarcacion emb = (Embarcacion) ob;
 		final List<Object> embarcaciones = new ArrayList<Object>();
 		try {
-			final String sql = "SELECT * FROM " + Constantes.EMBARCACION_TABLE + " WHERE "
-					+ Constantes.EMBARCACION_EMBNUMBER + "=?";
+			final String sql = "SELECT * FROM " + Constantes.EMBARCACION_TABLE + " WHERE " + Constantes.EMBARCACION_EMBNUMBER + "=?";
 			conn = Conexion.getConnection();
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, emb.getImoNumber());
@@ -157,22 +135,20 @@ public class EmbarcacionDao implements BaseDao {
 					embarcacion.setSummerDraft(rs.getDouble(Constantes.EMBARCACION_EMBSD));
 					embarcaciones.add(embarcacion);
 				}
-			} else {
-				log.info("No se ha podido conseguir la embarcacion");
 			}
+			conn.close();
 			return embarcaciones;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			log.error("Error al consultar la embarcacion - " + e.getMessage());
-			return null;
+			throw new ErrorDao(e);
 		} finally {
 			pst = null;
 			rs = null;
-			conn.close();
 		}
 	}
 
 	@Override
-	public List<Object> lista() throws SQLException {
+	public List<Object> lista() throws ErrorDao {
 		log.info("Entrando en lista");
 		final List<Object> embarcaciones = new ArrayList<Object>();
 		try {
@@ -193,17 +169,15 @@ public class EmbarcacionDao implements BaseDao {
 					embarcacion.setSummerDraft(rs.getDouble(Constantes.EMBARCACION_EMBSD));
 					embarcaciones.add(embarcacion);
 				}
-			} else {
-				log.info("No se ha podido conseguir las embarcaciones");
 			}
+			conn.close();
 			return embarcaciones;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			log.error("Error al listar las embarcaciones - " + e.getMessage());
-			return null;
+			throw new ErrorDao(e);
 		} finally {
 			pst = null;
 			rs = null;
-			conn.close();
 		}
 	}
 }

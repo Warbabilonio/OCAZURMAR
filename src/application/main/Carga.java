@@ -28,16 +28,16 @@ public class Carga extends Preloader implements EventHandler<Event> {
 
 	private double yOffset = 0;
 
-	private Stage preloaderStage;
+	private Stage preloaderStage = null;
 
-	private Scene scene;
+	private Scene scene = null;
 
-	private Label titulo;
+	private Label titulo = null;
 
 	public Carga() {}
 
 	@Override
-	public void init() throws Exception {
+	public void init() {
 		Platform.runLater(() -> {
 			titulo = new Label(Constantes.CARGA_TITULO);
 			titulo.setId("progreso-titulo");
@@ -53,15 +53,9 @@ public class Carga extends Preloader implements EventHandler<Event> {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		this.preloaderStage = primaryStage;
-		preloaderStage.setScene(scene);
-		preloaderStage.initStyle(StageStyle.UNDECORATED);
-		preloaderStage.setResizable(false);
-		preloaderStage.setAlwaysOnTop(true);
-		preloaderStage.setOnCloseRequest(Utilidades.noCerrarVentana());
-		Utilidades.centrarPantalla(preloaderStage, WIDTH, HEIGHT);
-		preloaderStage.show();
+		crearStage();
 	}
 
 	@Override
@@ -106,5 +100,15 @@ public class Carga extends Preloader implements EventHandler<Event> {
 					break;
 			}
 		}
+	}
+
+	private void crearStage() {
+		preloaderStage.setScene(scene);
+		preloaderStage.initStyle(StageStyle.UNDECORATED);
+		preloaderStage.setResizable(false);
+		preloaderStage.setAlwaysOnTop(true);
+		preloaderStage.setOnCloseRequest(Utilidades.noCerrarVentana());
+		Utilidades.centrarPantalla(preloaderStage, WIDTH, HEIGHT);
+		preloaderStage.show();
 	}
 }

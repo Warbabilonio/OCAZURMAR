@@ -1,17 +1,18 @@
 package application.daos;
 
-import java.sql.SQLException;
 import java.util.List;
+
+import application.errores.ErrorDao;
 
 public interface BaseDao {
 
-	Boolean alta(Object ob) throws SQLException;
+	Boolean alta(Object ob) throws ErrorDao;
 
-	Boolean baja(Object ob) throws SQLException;
+	Boolean baja(Object ob) throws ErrorDao;
 
-	Boolean modificacion(Object ob) throws SQLException;
+	Boolean modificacion(Object ob) throws ErrorDao;
 
-	List<Object> consulta(Object ob) throws SQLException;
+	List<Object> consulta(Object ob) throws ErrorDao;
 
-	List<Object> lista() throws SQLException;
+	List<Object> lista() throws ErrorDao;
 }

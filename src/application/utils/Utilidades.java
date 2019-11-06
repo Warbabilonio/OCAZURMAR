@@ -1,5 +1,16 @@
 package application.utils;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import application.bbdd.Conexion;
+import application.beans.Embarcacion;
+import application.errores.ErrorFacade;
+import application.facades.impl.EmbarcacionFacade;
+import application.main.Principal;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -8,6 +19,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class Utilidades {
+
+	private static final Logger log = Logger.getLogger(Utilidades.class);
 
 	private static Utilidades instancia = null;
 
@@ -34,6 +47,20 @@ public class Utilidades {
 				event.consume();
 			}
 		};
+	}
+
+	public static void conexionTest() {
+		try {
+			Connection conn = Conexion.getConnection();
+			List<Object> embarcaciones = EmbarcacionFacade.getInistance().lista();
+			for (Object ob : embarcaciones) {
+				final Embarcacion embarcacion = (Embarcacion) ob;
+				log.info(embarcacion.toString());
+			}
+			conn.close();
+		} catch (SQLException | ErrorFacade e) {
+			log.error("Error testeando la conexión - " + e.getMessage());
+		}
 	}
 
 	public static void addCss(Scene scene) {

@@ -1,17 +1,20 @@
 package application.utils;
 
-import application.bbdd.Conexion;
-import application.beans.Embarcacion;
-import application.daos.EmbarcacionDao;
+import application.daos.impl.EmbarcacionDao;
 
 public class StaticUtils {
 
-	private StaticUtils() {
-		// TODO Auto-generated constructor stub
+	private static StaticUtils instance = null;
+
+	private StaticUtils() {}
+
+	public static StaticUtils getInstance() {
+		if (instance == null)
+			instance = new StaticUtils();
+		return instance;
 	}
 
-	public static void iniciar() {
-	}
+	public static void iniciar() {}
 
 	public static EmbarcacionDao getEmbarcacionDAO() {
 		return EmbarcacionDao.getInstance();

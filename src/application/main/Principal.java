@@ -1,7 +1,6 @@
 package application.main;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,8 +9,8 @@ import com.sun.javafx.application.LauncherImpl;
 
 import application.bbdd.Conexion;
 import application.beans.Embarcacion;
-import application.facade.EmbarcacionFacade;
-import application.utils.StaticUtils;
+import application.facades.impl.EmbarcacionFacade;
+import application.utils.Utilidades;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -31,7 +30,6 @@ public class Principal extends Application {
 	// Just a counter to create some delay while showing preloader.
 	private static final int COUNT_LIMIT = 500000;
 
-	private static int stepCount = 1;
 
 	private Stage applicationStage;
 
@@ -40,31 +38,19 @@ public class Principal extends Application {
 	}
 
 	@Override
-	public void init() throws Exception {
+	public void init() {
+		Utilidades.conexionTest();
+		log.info("hash code from utilidades: " +Utilidades.getInstance().hashCode());
 		for (int i = 0; i < COUNT_LIMIT; i++) {
 			double progress = (100 * i) / COUNT_LIMIT;
 			LauncherImpl.notifyPreloader(this, new Carga.ProgressNotification(progress));
 		}
-		testConexion();
+		
 	}
 
-	private void testConexion() {
-		try {
-			Connection conn = Conexion.getConnection();
-			log.info("Conexion Realizada correctamente - " + conn.toString());
-			List<Object> embarcaciones = EmbarcacionFacade.getInistance().lista();
-			for (Object ob : embarcaciones) {
-				final Embarcacion embarcacion = (Embarcacion) ob;
-				log.info(embarcacion.toString());
-			}
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage){
 		applicationStage = primaryStage;
 		Label title = new Label("This is your application!");
 		title.setTextAlignment(TextAlignment.CENTER);
@@ -80,4 +66,6 @@ public class Principal extends Application {
 	public void stop() throws Exception {
 		super.stop();
 	}
+	
+	
 }
