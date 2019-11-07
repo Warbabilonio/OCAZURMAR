@@ -49,21 +49,61 @@ public class Utilidades {
 		};
 	}
 
+	public static void addCss(Scene scene) {
+		scene.getStylesheets().add(ClassLoader.getSystemResource("css/application.css").toExternalForm());
+	}
+
 	public static void conexionTest() {
 		try {
 			Connection conn = Conexion.getConnection();
-			List<Object> embarcaciones = EmbarcacionFacade.getInistance().lista();
-			for (Object ob : embarcaciones) {
-				final Embarcacion embarcacion = (Embarcacion) ob;
-				log.info(embarcacion.toString());
-			}
+			log.info("Conexion de Test : " + conn.toString());
+			final Embarcacion emb = new Embarcacion(000000, 0.0, 0.0, 0.0, 0.0, 0.0, 9999, "BARCOTEST");
+			testAlta(emb);
+			testLista();
+			testConsulta(emb);
+			testBaja(emb);
+			testLista();
 			conn.close();
 		} catch (SQLException | ErrorFacade e) {
 			log.error("Error testeando la conexión - " + e.getMessage());
 		}
 	}
 
-	public static void addCss(Scene scene) {
-		scene.getStylesheets().add(ClassLoader.getSystemResource("css/application.css").toExternalForm());
+	private static void testAlta(Embarcacion emb) throws ErrorFacade {
+		if (EmbarcacionFacade.getInistance().alta(emb))
+			log.info("Test Alta - OK");
+		else
+			log.info("Test Alta - FAILURE");
+	}
+
+	private static void testBaja(Embarcacion emb) throws ErrorFacade {
+		if (EmbarcacionFacade.getInistance().baja(emb))
+			log.info("Test Baja - OK");
+		else
+			log.info("Test Baja - FAILURE");
+	}
+
+	private static void testConsulta(Embarcacion emb) throws ErrorFacade {
+		final List<Object> embs = EmbarcacionFacade.getInistance().consulta(emb);
+		if (embs != null) {
+			log.info("Test Consulta - OK: ");
+			for (Object ob : embs) {
+				final Embarcacion embConsulta = (Embarcacion) ob;
+				log.info(embConsulta.toString());
+			}
+		} else
+			log.info("Test Consulta - FAILURE");
+	}
+
+	private static void testLista() throws ErrorFacade {
+		List<Object> embarcaciones = EmbarcacionFacade.getInistance().lista();
+		if (embarcaciones != null) {
+			log.info("Test Lista - OK: ");
+			for (Object ob : embarcaciones) {
+				final Embarcacion embarcacion = (Embarcacion) ob;
+				log.info(embarcacion.toString());
+			}
+		} else
+			log.info("Test Lista - FAILURE");
 	}
 }

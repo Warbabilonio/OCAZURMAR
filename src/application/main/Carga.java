@@ -38,6 +38,7 @@ public class Carga extends Preloader implements EventHandler<Event> {
 
 	@Override
 	public void init() {
+		log.info("Estoy en el hilo: " +Thread.currentThread().toString());
 		Platform.runLater(() -> {
 			titulo = new Label(Constantes.CARGA_TITULO);
 			titulo.setId("progreso-titulo");
@@ -49,12 +50,14 @@ public class Carga extends Preloader implements EventHandler<Event> {
 			scene.setOnMouseDragged(this);
 			scene.setCursor(Cursor.WAIT);
 			Utilidades.addCss(scene);
+			log.info("Estoy en el hilo: " +Thread.currentThread().toString());
 		});
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
 		this.preloaderStage = primaryStage;
+		log.info("Estoy en el hilo: " +Thread.currentThread().toString());
 		crearStage();
 	}
 
@@ -88,7 +91,7 @@ public class Carga extends Preloader implements EventHandler<Event> {
 	public void handle(Event event) {
 		if (event instanceof MouseEvent) {
 			MouseEvent evento = (MouseEvent) event;;
-			switch (event.getEventType().getName()) {
+			switch (evento.getEventType().getName()) {
 				case "MOUSE_PRESSED":
 					xOffset = evento.getSceneX();
 					yOffset = evento.getSceneY();

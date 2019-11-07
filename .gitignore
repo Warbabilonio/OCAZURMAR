@@ -4,4 +4,5 @@ target/
 .tern-project
 /.apt_generated_tests/
 bin/
+.classpath
 

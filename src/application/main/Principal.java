@@ -12,6 +12,7 @@ import application.beans.Embarcacion;
 import application.facades.impl.EmbarcacionFacade;
 import application.utils.Utilidades;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -30,7 +31,6 @@ public class Principal extends Application {
 	// Just a counter to create some delay while showing preloader.
 	private static final int COUNT_LIMIT = 500000;
 
-
 	private Stage applicationStage;
 
 	public Principal() {
@@ -39,18 +39,22 @@ public class Principal extends Application {
 
 	@Override
 	public void init() {
-		Utilidades.conexionTest();
-		log.info("hash code from utilidades: " +Utilidades.getInstance().hashCode());
-		for (int i = 0; i < COUNT_LIMIT; i++) {
-			double progress = (100 * i) / COUNT_LIMIT;
-			LauncherImpl.notifyPreloader(this, new Carga.ProgressNotification(progress));
+		try {
+			log.info("init - Estoy en el hilo: " + Thread.currentThread().toString());
+			Platform.runLater(() -> {
+				log.info("init.Platform - Estoy en el hilo: " + Thread.currentThread().toString());
+				Utilidades.conexionTest();
+			});
+			log.info("init - Mandando a dormir");
+			Thread.sleep(5000);
+			log.info("init - Me he despertado : " + Thread.currentThread().toString());
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		
 	}
 
-
 	@Override
-	public void start(Stage primaryStage){
+	public void start(Stage primaryStage) {
 		applicationStage = primaryStage;
 		Label title = new Label("This is your application!");
 		title.setTextAlignment(TextAlignment.CENTER);
@@ -60,12 +64,11 @@ public class Principal extends Application {
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
 		applicationStage.setScene(scene);
 		applicationStage.show();
+		log.info("Estoy en el hilo: " + Thread.currentThread().toString());
 	}
 
 	@Override
 	public void stop() throws Exception {
 		super.stop();
 	}
-	
-	
 }

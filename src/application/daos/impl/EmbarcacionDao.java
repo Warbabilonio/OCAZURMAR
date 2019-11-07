@@ -41,8 +41,11 @@ public class EmbarcacionDao implements BaseDao {
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
 			conn = Conexion.getConnection();
-			final String sql = "INSERT INTO " + Constantes.EMBARCACION_TABLE + "(" + Constantes.EMBARCACION_EMBNUMBER + "," + Constantes.EMBARCACION_EMBLOA + "," + Constantes.EMBARCACION_EMBBREATH + "," + Constantes.EMBARCACION_EMBDEPTH + ","
-					+ Constantes.EMBARCACION_EMBSD + "," + Constantes.EMBARCACION_EMBDW + "," + Constantes.EMBARCACION_EMBBY + ")" + "VALUES(?,?,?,?,?,?,?,?)";
+			final String sql = "INSERT INTO " + Constantes.EMBARCACION_TABLE + "(" + Constantes.EMBARCACION_EMBNUMBER
+					+ "," + Constantes.EMBARCACION_EMBLOA + "," + Constantes.EMBARCACION_EMBBREATH + ","
+					+ Constantes.EMBARCACION_EMBDEPTH + "," + Constantes.EMBARCACION_EMBSD + ","
+					+ Constantes.EMBARCACION_EMBDW + "," + Constantes.EMBARCACION_EMBBY + ","
+					+ Constantes.EMBARCACION_EMBNAME + ")" + "VALUES(?,?,?,?,?,?,?,?)";
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, embarcacion.getImoNumber());
 			pst.setDouble(2, embarcacion.getLoa());
@@ -69,7 +72,8 @@ public class EmbarcacionDao implements BaseDao {
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
 			conn = Conexion.getConnection();
-			final String sql = "DELETE FROM " + Constantes.EMBARCACION_TABLE + " WHERE " + Constantes.EMBARCACION_EMBNUMBER + " = ?";
+			final String sql = "DELETE FROM " + Constantes.EMBARCACION_TABLE + " WHERE "
+					+ Constantes.EMBARCACION_EMBNUMBER + " = ?";
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, embarcacion.getImoNumber());
 			final int status = pst.executeUpdate();
@@ -89,8 +93,11 @@ public class EmbarcacionDao implements BaseDao {
 		final Embarcacion embarcacion = (Embarcacion) ob;
 		try {
 			conn = Conexion.getConnection();
-			final String sql = "UPDATE " + Constantes.EMBARCACION_TABLE + " SET " + Constantes.EMBARCACION_EMBLOA + "=?," + Constantes.EMBARCACION_EMBBREATH + "=?," + Constantes.EMBARCACION_EMBDEPTH + "=?," + Constantes.EMBARCACION_EMBSD + "=?,"
-					+ Constantes.EMBARCACION_EMBDW + "=?," + Constantes.EMBARCACION_EMBBY + "=?," + Constantes.EMBARCACION_EMBNAME + "=? WHERE " + Constantes.EMBARCACION_EMBNUMBER + "=?";
+			final String sql = "UPDATE " + Constantes.EMBARCACION_TABLE + " SET " + Constantes.EMBARCACION_EMBLOA
+					+ "=?," + Constantes.EMBARCACION_EMBBREATH + "=?," + Constantes.EMBARCACION_EMBDEPTH + "=?,"
+					+ Constantes.EMBARCACION_EMBSD + "=?," + Constantes.EMBARCACION_EMBDW + "=?,"
+					+ Constantes.EMBARCACION_EMBBY + "=?," + Constantes.EMBARCACION_EMBNAME + "=? WHERE "
+					+ Constantes.EMBARCACION_EMBNUMBER + "=?";
 			pst = conn.prepareStatement(sql);
 			pst.setDouble(1, embarcacion.getLoa());
 			pst.setDouble(2, embarcacion.getBreath());
@@ -115,14 +122,16 @@ public class EmbarcacionDao implements BaseDao {
 	public List<Object> consulta(Object ob) throws ErrorDao {
 		log.info("Entrando en consulta");
 		final Embarcacion emb = (Embarcacion) ob;
-		final List<Object> embarcaciones = new ArrayList<Object>();
+		List<Object> embarcaciones = null;
 		try {
-			final String sql = "SELECT * FROM " + Constantes.EMBARCACION_TABLE + " WHERE " + Constantes.EMBARCACION_EMBNUMBER + "=?";
+			final String sql = "SELECT * FROM " + Constantes.EMBARCACION_TABLE + " WHERE "
+					+ Constantes.EMBARCACION_EMBNUMBER + "=?";
 			conn = Conexion.getConnection();
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, emb.getImoNumber());
 			rs = pst.executeQuery();
 			if (rs != null) {
+				embarcaciones = new ArrayList<>();
 				while (rs.next()) {
 					final Embarcacion embarcacion = new Embarcacion();
 					embarcacion.setBreath(rs.getDouble(Constantes.EMBARCACION_EMBBREATH));
@@ -150,13 +159,14 @@ public class EmbarcacionDao implements BaseDao {
 	@Override
 	public List<Object> lista() throws ErrorDao {
 		log.info("Entrando en lista");
-		final List<Object> embarcaciones = new ArrayList<Object>();
+		List<Object> embarcaciones = null;
 		try {
 			final String sql = "SELECT * FROM " + Constantes.EMBARCACION_TABLE;
 			conn = Conexion.getConnection();
 			pst = conn.prepareStatement(sql);
 			rs = pst.executeQuery();
 			if (rs != null) {
+				embarcaciones = new ArrayList<Object>();
 				while (rs.next()) {
 					final Embarcacion embarcacion = new Embarcacion();
 					embarcacion.setBreath(rs.getDouble(Constantes.EMBARCACION_EMBBREATH));
