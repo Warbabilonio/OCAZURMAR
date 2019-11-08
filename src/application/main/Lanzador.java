@@ -7,9 +7,9 @@ import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class Main {
+public class Lanzador {
 
-	private static final Logger log = Logger.getLogger(Main.class);
+	private static final Logger log = Logger.getLogger(Lanzador.class);
 
 	public static void main(String[] args) {
 		log.info("Iniciando la app...");

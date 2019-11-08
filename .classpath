@@ -4,9 +4,9 @@
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="var" path="LIBRERIAS_IDE"/>
-	<classpathentry kind="var" path="LIBRERIAS_IDE/log4j.jar"/>
-	<classpathentry kind="var" path="LIBRERIAS_IDE/miniconnectionpoolmanager.jar" sourcepath="/ECLIPSE_SRC/minipollmanagger"/>
-	<classpathentry kind="var" path="LIBRERIAS_IDE/sqlite-jdbc-3.7.15-m1.jar"/>
+	<classpathentry kind="var" path="LIBRERIAS"/>
+	<classpathentry kind="var" path="LIBRERIAS/log4j.jar"/>
+	<classpathentry kind="var" path="LIBRERIAS/miniconnectionpoolmanager.jar" sourcepath="/ECLIPSE_SRC/minipollmanagger"/>
+	<classpathentry kind="var" path="LIBRERIAS/sqlite-jdbc-3.7.15-m1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
