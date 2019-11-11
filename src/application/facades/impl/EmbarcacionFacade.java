@@ -1,24 +1,20 @@
 package application.facades.impl;
 
-import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import application.daos.impl.EmbarcacionDao;
-import application.errores.ErrorDao;
 import application.errores.ErrorFacade;
 import application.facades.BaseFacade;
+import application.utils.StaticUtils;
 
 public class EmbarcacionFacade implements BaseFacade {
 
-	private static final Logger log = Logger.getLogger(EmbarcacionFacade.class);
-
-	private final EmbarcacionDao dao = EmbarcacionDao.getInstance();
+	private final EmbarcacionDao dao = StaticUtils.getEmbarcacionDao();
 
 	private static EmbarcacionFacade instance = null;
 
-	private EmbarcacionFacade() {}
+	private EmbarcacionFacade() {
+	}
 
 	public static EmbarcacionFacade getInistance() {
 		if (instance == null) {
