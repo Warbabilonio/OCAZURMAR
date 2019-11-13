@@ -38,26 +38,15 @@ public class Carga extends Preloader implements EventHandler<Event> {
 
 	@Override
 	public void init() {
-		log.info("Estoy en el hilo: " +Thread.currentThread().toString());
 		Platform.runLater(() -> {
-			titulo = new Label(Constantes.CARGA_TITULO);
-			titulo.setId("progreso-titulo");
-			VBox root = new VBox();
-			root.getChildren().addAll(titulo);
-			root.setId("progreso-panel");
-			scene = new Scene(root, WIDTH, HEIGHT);
-			scene.setOnMousePressed(this);
-			scene.setOnMouseDragged(this);
-			scene.setCursor(Cursor.WAIT);
-			Utilidades.addCss(scene);
-			log.info("Estoy en el hilo: " +Thread.currentThread().toString());
+			crearScene();
 		});
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
 		this.preloaderStage = primaryStage;
-		log.info("Estoy en el hilo: " +Thread.currentThread().toString());
+		log.info("Estoy en el hilo: " + Thread.currentThread().toString());
 		crearStage();
 	}
 
@@ -90,19 +79,28 @@ public class Carga extends Preloader implements EventHandler<Event> {
 	@Override
 	public void handle(Event event) {
 		if (event instanceof MouseEvent) {
-			MouseEvent evento = (MouseEvent) event;;
-			switch (evento.getEventType().getName()) {
-				case "MOUSE_PRESSED":
-					xOffset = evento.getSceneX();
-					yOffset = evento.getSceneY();
-					break;
-				case "MOUSE_DRAGGED":
-					preloaderStage.setX(evento.getScreenX() - xOffset);
-					preloaderStage.setY(evento.getScreenY() - yOffset);
-				default:
-					break;
+			final MouseEvent evento = (MouseEvent) event;
+			if (evento.getEventType() == MouseEvent.MOUSE_PRESSED) {
+				xOffset = evento.getSceneX();
+				yOffset = evento.getSceneY();
+			} else if (evento.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+				preloaderStage.setX(evento.getScreenX() - xOffset);
+				preloaderStage.setY(evento.getScreenY() - yOffset);
 			}
 		}
+	}
+
+	private void crearScene() {
+		titulo = new Label(Constantes.CARGA_TITULO);
+		titulo.setId("progreso-titulo");
+		VBox root = new VBox();
+		root.getChildren().addAll(titulo);
+		root.setId("progreso-panel");
+		scene = new Scene(root, WIDTH, HEIGHT);
+		scene.setOnMousePressed(this);
+		scene.setOnMouseDragged(this);
+		scene.setCursor(Cursor.WAIT);
+		Utilidades.addCss(scene);
 	}
 
 	private void crearStage() {
