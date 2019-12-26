@@ -52,6 +52,10 @@ public class Utilidades {
 		scene.getStylesheets().add(ClassLoader.getSystemResource("css/application.css").toExternalForm());
 	}
 
+	public static void fullScream(Stage stage) {
+		stage.setMaximized(Boolean.TRUE);
+	}
+
 	public static void conexionTest() {
 		try {
 			Connection conn = Conexion.getConnection();
@@ -95,9 +99,5 @@ public class Utilidades {
 			log.debug("Test Lista - OK ");
 		else
 			log.debug("Test Lista - FAILURE");
-	}
-
-	public static void fullScream(Stage stage) {
-		stage.setMaximized(Boolean.TRUE);
 	}
 }
