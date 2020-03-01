@@ -15,5 +15,6 @@ public class Lanzador {
 		log.info("Iniciando la app...");
 		LauncherImpl.launchApplication(Principal.class, Carga.class, args);
 		System.out.println("Pruiebita git");
+		System.out.println("Pruiebita git2");
 	}
 }
