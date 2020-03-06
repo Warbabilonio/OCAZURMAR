@@ -2,22 +2,26 @@ package application.main;
 
 import org.apache.log4j.Logger;
 
+import com.sun.javafx.application.LauncherImpl;
+
 import application.utils.Utilidades;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Principal extends Application {
 
 	private static final Logger log = Logger.getLogger(Principal.class);
 
-	private static final double WIDTH = 800;
+	private Stage principalStage = null;
 
-	private static final double HEIGHT = 600;
-
-	private Stage applicationStage;
+	private Scene principalScene = null;
 
 	public Principal() {
 		log.info("Entrando al constructor");
@@ -27,20 +31,18 @@ public class Principal extends Application {
 	public void init() {
 		try {
 			Platform.runLater(() -> {
-				log.info("init.Platform - Estoy en el hilo: " + Thread.currentThread().toString());
 				Utilidades.conexionTest();
 			});
-			log.info("init - Mandando a dormir");
 			Thread.sleep(5000);
-			log.info("init - Me he despertado : " + Thread.currentThread().toString());
 		} catch (Exception e) {
-			log.error("Error en el Init", e);
+			log.error("Error al iniciar la Aplicacion", e);
 		}
 	}
 
 	@Override
-	public void start(Stage primaryStage) {
-		crearStage(primaryStage);
+	public void start(Stage stage) {
+		this.principalStage = stage;
+		crearStage();
 	}
 
 	@Override
@@ -48,13 +50,20 @@ public class Principal extends Application {
 		super.stop();
 	}
 
-	private void crearStage(Stage primaryStage) {
-		this.applicationStage = primaryStage;
-		VBox root = new VBox();
-		Scene scene = new Scene(root);
-		applicationStage.setScene(scene);
-		Utilidades.fullScream(primaryStage);
-		applicationStage.show();
-		log.info("Estoy en el hilo: " + Thread.currentThread().toString());
+	private void crearStage() {
+		crearScene();
+		principalStage.setScene(principalScene);
+		principalStage.initStyle(StageStyle.UNDECORATED);
+		principalStage.show();
+	}
+
+	private void crearScene() {
+		final VBox root = new VBox();
+		MenuItem opcion1 = new MenuItem("Opcion 1");
+		Menu menu = new Menu("Menu");
+		menu.getItems().add(opcion1);
+		MenuBar menuBar = new MenuBar(menu);
+		// add scene to stage
+		this.principalScene = new Scene(root);
 	}
 }
